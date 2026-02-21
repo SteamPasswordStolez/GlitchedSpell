@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glitched Spell - Live Feed</title>
+    <!-- Import a modern font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/game.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="ui-layer">
+      <div class="hud-top">
+        <div class="speedometer"><span id="speed-val">0</span> KM/H</div>
+        <div class="hp-bar-container">
+            <div class="hp-bar-label">SYS_INTEGRITY</div>
+            <div class="hp-bar-track">
+                <div class="hp-bar-fill" id="player-hp-fill"></div>
+            </div>
+        </div>
+        <div class="glitch-warning">ENVIRONMENT COMPROMISED</div>
+      </div>
+      <div class="hud-bottom">
+        <div class="spell-slot" id="spell-q">
+          <div class="spell-key">Q</div>
+          <div class="spell-name">Nitro Dash</div>
+          <div class="cooldown-overlay"></div>
+        </div>
+        <div class="spell-slot" id="spell-w">
+          <div class="spell-key">W</div>
+          <div class="spell-name">Juggernaut</div>
+          <div class="cooldown-overlay"></div>
+        </div>
+        <div class="spell-slot" id="spell-e">
+          <div class="spell-key">E</div>
+          <div class="spell-name">(Locked)</div>
+          <div class="cooldown-overlay"></div>
+        </div>
+        <div class="spell-slot" id="spell-r">
+          <div class="spell-key">R</div>
+          <div class="spell-name">(Locked)</div>
+          <div class="cooldown-overlay"></div>
+        </div>
+      </div>
+    </div>
+    <div id="death-overlay" class="fullscreen-overlay">
+        <h1>SYSTEM FAILURE</h1>
+        <p>VEHICLE DESTROYED</p>
+        <button onclick="window.location.href='/index.html'">RETURN TO LOBBY</button>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

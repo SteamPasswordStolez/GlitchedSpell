@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glitched Spell</title>
+    <!-- Use a sleek modern font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <!-- 3D Showroom Background -->
+    <canvas id="lobby-canvas"></canvas>
+
+    <!-- Scanline / Vignette Overlay for atmosphere -->
+    <div class="fx-overlay"></div>
+
+    <div class="lobby-ui-container">
+      
+      <!-- HEADER / LOGO -->
+      <header class="lobby-header">
+        <h1 class="game-logo">GLITCHED SPELL</h1>
+        <div class="version-tag">Build: 0.1a // Origin Protocol</div>
+      </header>
+
+      <!-- SIDEBAR MENUS -->
+      <nav class="menu-container">
+        
+        <!-- 1. MAIN MENU -->
+        <div id="menu-main" class="menu-panel active">
+          <ul class="btn-list">
+            <li><button class="menu-btn" id="btn-campaign"><span class="btn-text">CAMPAIGN</span><span class="btn-bg"></span></button></li>
+            <li><button class="menu-btn" id="btn-singleplayer"><span class="btn-text">SINGLEPLAYER</span><span class="btn-bg"></span></button></li>
+            <li><button class="menu-btn" id="btn-multiplayer"><span class="btn-text">MULTIPLAYER</span><span class="btn-bg"></span></button></li>
+            <li><button class="menu-btn" id="btn-settings"><span class="btn-text">SETTINGS</span><span class="btn-bg"></span></button></li>
+            <li><button class="menu-btn btn-exit" id="btn-exit"><span class="btn-text">EXIT</span><span class="btn-bg"></span></button></li>
+          </ul>
+        </div>
+
+        <!-- 2. CAMPAIGN MENU -->
+        <div id="menu-campaign" class="menu-panel" style="display: none;">
+          <h2>Campaign: Into the Origin</h2>
+          <p class="lore-desc">Choose your path and uncover the secrets of the Ammons.</p>
+          <ul class="btn-list">
+            <li><button class="menu-btn" onclick="window.location.href='game.html'"><span class="btn-text">ENTER (DEV: START RACE)</span><span class="btn-bg"></span></button></li>
+            <li><button class="menu-btn btn-back"><span class="btn-text">BACK</span><span class="btn-bg"></span></button></li>
+          </ul>
+        </div>
+
+        <!-- 3. SINGLEPLAYER MENU -->
+        <div id="menu-single" class="menu-panel" style="display: none;">
+          <h2>Singleplayer</h2>
+          <p class="lore-desc">Custom races against AI or Time Attack.</p>
+          <ul class="btn-list">
+            <li><button class="menu-btn btn-back"><span class="btn-text">BACK</span><span class="btn-bg"></span></button></li>
+          </ul>
+        </div>
+
+        <!-- 4. MULTIPLAYER MENU -->
+        <div id="menu-multi" class="menu-panel" style="display: none;">
+          <h2>Multiplayer</h2>
+          <p class="lore-desc">Connection Lost: Omni Servers are currently down.</p>
+          <ul class="btn-list">
+            <li><button class="menu-btn btn-back"><span class="btn-text">BACK</span><span class="btn-bg"></span></button></li>
+          </ul>
+        </div>
+
+        <!-- 5. SETTINGS MENU -->
+        <div id="menu-settings" class="menu-panel" style="display: none;">
+          <h2>Settings</h2>
+          <ul class="btn-list">
+            <li><button class="menu-btn"><span class="btn-text">AUDIO</span><span class="btn-bg"></span></button></li>
+            <li><button class="menu-btn"><span class="btn-text">GRAPHICS</span><span class="btn-bg"></span></button></li>
+            <li><button class="menu-btn"><span class="btn-text">CONTROLS</span><span class="btn-bg"></span></button></li>
+            <li><button class="menu-btn btn-back"><span class="btn-text">BACK</span><span class="btn-bg"></span></button></li>
+          </ul>
+        </div>
+
+      </nav>
+
+      <!-- BOTTOM RIGHT INFO -->
+      <footer class="lobby-footer">
+        <div class="user-info">
+          <span class="status-indicator"></span>
+          Player: <span class="highlight">GUEST_1048</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Include Entry point for the Lobby logic -->
+    <script type="module" src="/src/lobby/lobby-main.js"></script>
+  </body>
+</html>
