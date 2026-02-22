@@ -9,6 +9,7 @@ export class MenuManager {
         };
         
         this.bindEvents();
+        this.checkTutorial();
     }
 
     bindEvents() {
@@ -23,6 +24,16 @@ export class MenuManager {
         backButtons.forEach(btn => {
             btn.addEventListener('click', () => this.navigateTo('main'));
         });
+        
+        // Tutorial Modal Close
+        const closeTutorialBtn = document.getElementById('btn-close-tutorial');
+        if (closeTutorialBtn) {
+            closeTutorialBtn.addEventListener('click', () => {
+                document.getElementById('tutorial-modal').style.display = 'none';
+                // Remove the query parameter from the URL to prevent looping
+                window.history.replaceState({}, document.title, window.location.pathname);
+            });
+        }
         
         // Play click sound (Placeholder logic)
         const allButtons = document.querySelectorAll('.menu-btn');
@@ -60,5 +71,17 @@ export class MenuManager {
     playClickSound() {
          // TODO: Implement actual Audio object play
          // console.log("click");
+    }
+
+    checkTutorial() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('tutorial') === 'true') {
+            const tutorialModal = document.getElementById('tutorial-modal');
+            if (tutorialModal) {
+                tutorialModal.style.display = 'flex';
+                // Pre-navigate to campaign menu underneath
+                this.navigateTo('campaign');
+            }
+        }
     }
 }

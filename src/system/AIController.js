@@ -54,11 +54,14 @@ export class AIController {
             this.car.keys.forward = true;
             // Optionally, give AI fake boost if they are too far behind (rubberbanding)
             if (distanceZ > 30) {
-                // Determine a safe maximum catch-up speed (1.5x player speed, but capped at 90m/s (~320km/h))
-                const catchupSpeed = Math.min(targetSpeed * 1.5 + 10, 90);
+                // Determine a safe maximum catch-up speed 
+                const catchupRatio = this.car.carType === 'alpha_omega' ? 1.2 : 1.5;
+                const maxSpeed = this.car.carType === 'alpha_omega' ? 70 : 90;
+                const catchupSpeed = Math.min(targetSpeed * catchupRatio + 10, maxSpeed);
                 if (mySpeed < catchupSpeed) {
                     // Apply a massive artificial forward force to catch up
-                    this.car.chassisBody.applyLocalForce(new CANNON.Vec3(0, 0, 30000), new CANNON.Vec3(0,0,0));
+                    const forceAmt = this.car.carType === 'alpha_omega' ? 80000 : 30000;
+                    this.car.chassisBody.applyLocalForce(new CANNON.Vec3(0, 0, forceAmt), new CANNON.Vec3(0,0,0));
                 }
             }
         } else if (distanceZ < -50) {
@@ -75,8 +78,10 @@ export class AIController {
         // AI wants to match the X coordinate of the player to ram them
         const distanceX = targetPos.x - myPos.x;
         
-        // Deadzone so it doesn't jitter rapidly
-        if (Math.abs(distanceX) > 2.0) {
+        // Boss steering is heavier and less prone to jitter
+        const deadzone = this.car.carType === 'alpha_omega' ? 4.0 : 2.0;
+        
+        if (Math.abs(distanceX) > deadzone) {
             if (distanceX > 0) {
                 // Target is to our Left (+X), turn left
                 this.car.keys.left = true;

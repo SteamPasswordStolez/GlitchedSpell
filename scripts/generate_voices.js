@@ -14,10 +14,13 @@ if (!fs.existsSync(targetDir)) {
 
 // Map of lines to generate
 const voicesToGenerate = [
-    { id: "1-1_police_1", text: "Scan complete. Unregistered Spell Runner identified. Halt your vehicle immediately.", voiceId: "ErXwobaYiN019PkySvjV" },
-    { id: "1-1_player_1", text: "Damn it, they're already onto us.", voiceId: "VR6AewLTigWG4xSOukaG" },
-    { id: "1-1_player_2", text: "Initiating Origin Protocol. Let's see how long this piece of junk can hold together!", voiceId: "VR6AewLTigWG4xSOukaG" },
-    { id: "1-1_police_2", text: "Suspect is attempting to flee. Lethal force authorized.", voiceId: "ErXwobaYiN019PkySvjV" }
+    { id: "1-2_player_1", text: "Thought we lost them, but they stick like ghosts. Worse than the stench of the sewers.", voiceId: "VR6AewLTigWG4xSOukaG" },
+    { id: "sys_warning_1", text: "Massive blockade detected ahead. Alternative route unavailable.", voiceId: "21m00Tcm4TlvDq8ikWAM" },
+    { id: "1-2_player_2", text: "Not planning to detour anyway. We're blasting straight through. Hold on tight!", voiceId: "VR6AewLTigWG4xSOukaG" },
+    { id: "1-2_police_1", text: "Target has entered the acceleration zone. Deploying capture nets.", voiceId: "ErXwobaYiN019PkySvjV" },
+    { id: "1-3_police_1", text: "Attention all units. Suspect has entered Core Sector 3. Destruction authorized.", voiceId: "ErXwobaYiN019PkySvjV" },
+    { id: "1-3_player_1", text: "Finally showing their true colors. Not far from the core now. Nitro at maximum output!", voiceId: "VR6AewLTigWG4xSOukaG" },
+    { id: "sys_warning_2", text: "Rear armor integrity at 40 percent. Multiple high-speed bogies approaching.", voiceId: "21m00Tcm4TlvDq8ikWAM" }
 ];
 
 async function generateAudio(line, apiKey) {

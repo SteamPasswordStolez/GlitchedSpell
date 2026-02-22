@@ -1,11 +1,13 @@
-
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
+import { CampaignData } from "../data/CampaignData.js";
 
 export class Environment {
-  constructor(scene, world) {
+  constructor(scene, world, stageId = '1-1') {
     this.scene = scene;
     this.world = world;
+    this.stageId = stageId;
+    this.config = CampaignData[stageId]?.config || CampaignData['1-1'].config;
 
     this.initLighting();
     this.initTrack();
@@ -30,8 +32,9 @@ export class Environment {
     directionalLight.shadow.camera.bottom = -100;
     this.scene.add(directionalLight);
 
-    // Add atmospheric fog
-    this.scene.fog = new THREE.FogExp2(0x050510, 0.002);
+    // Add atmospheric fog based on stage config
+    let fogColor = this.config.fogColor || 0x050510;
+    this.scene.fog = new THREE.FogExp2(fogColor, 0.002);
   }
 
   initTrack() {
@@ -62,7 +65,7 @@ export class Environment {
     // --- 3. Ground Visual Mesh ---
     // Create a sleek straight racing track instead of an infinite grid
     const trackWidth = 80;
-    const trackLength = 4000;
+    const trackLength = this.config.trackLength || 4000;
     
     // Main Road
     const roadGeo = new THREE.PlaneGeometry(trackWidth, trackLength);
@@ -79,9 +82,12 @@ export class Environment {
     this.scene.add(roadMesh);
 
     // Glowing Neon Borders
+    let colorLeft = this.config.neonColors ? this.config.neonColors[0] : 0x00ffff;
+    let colorRight = this.config.neonColors ? this.config.neonColors[1] : 0xff00ff;
+
     const borderGeo = new THREE.BoxGeometry(2, 0.5, trackLength);
-    const borderMatCyan = new THREE.MeshStandardMaterial({ color: 0x00ffff, emissive: 0x00ffff, emissiveIntensity: 2 });
-    const borderMatMagenta = new THREE.MeshStandardMaterial({ color: 0xff00ff, emissive: 0xff00ff, emissiveIntensity: 2 });
+    const borderMatCyan = new THREE.MeshStandardMaterial({ color: colorLeft, emissive: colorLeft, emissiveIntensity: 2 });
+    const borderMatMagenta = new THREE.MeshStandardMaterial({ color: colorRight, emissive: colorRight, emissiveIntensity: 2 });
 
     const leftBorder = new THREE.Mesh(borderGeo, borderMatCyan);
     leftBorder.position.set(trackWidth / 2, 0.25, trackLength / 2 - 200);
@@ -103,9 +109,11 @@ export class Environment {
     const crateGeo = new THREE.BoxGeometry(2, 2, 2);
     const crateMat = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.9, metalness: 0.8 });
 
+    let obstacleChance = this.config.obstacleChance || 0.4;
+
     for (let z = obstacleZStart; z < obstacleZEnd; z += spawnZStep) {
-        // 60% chance to spawn an obstacle at this step
-        if (Math.random() > 0.4) {
+        // dynamic chance to spawn an obstacle at this step
+        if (Math.random() < obstacleChance) {
             const xOffset = (Math.random() - 0.5) * (trackWidth - 10); // Random X position on track
             const isBarrel = Math.random() > 0.5;
 
@@ -202,18 +210,16 @@ export class Environment {
 
   initCheckpoints() {
     this.checkpoints = [];
-    const positions = [
-        new THREE.Vector3(0, 15, 600),
-        new THREE.Vector3(50, 15, 1200),
-        new THREE.Vector3(-50, 15, 1800),
-        new THREE.Vector3(20, 15, 2500),
-        new THREE.Vector3(0, 15, 3300) // Final goal
-    ];
+    const positions = (this.config.checkpoints || [
+        [0, 15, 600], [0, 15, 1200], [0, 15, 2000]
+    ]).map(arr => new THREE.Vector3(arr[0], arr[1], arr[2]));
+
+    let cpColor = this.config.checkpointColor || 0x00ffff;
 
     const ringGeo = new THREE.TorusGeometry(30, 2, 16, 100);
     const ringMat = new THREE.MeshStandardMaterial({
-        color: 0x00ffff,
-        emissive: 0x00ffff,
+        color: cpColor,
+        emissive: cpColor,
         emissiveIntensity: 3,
         transparent: true,
         opacity: 0.8,
@@ -225,7 +231,7 @@ export class Environment {
         ring.position.copy(pos);
         this.scene.add(ring);
         
-        const light = new THREE.PointLight(0x00ffff, 10, 150);
+        const light = new THREE.PointLight(cpColor, 10, 150);
         light.position.copy(pos);
         this.scene.add(light);
 

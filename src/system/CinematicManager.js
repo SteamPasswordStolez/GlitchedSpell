@@ -21,6 +21,14 @@ export class CinematicManager {
         this.uiContainer.appendChild(this.letterboxBottom);
         this.uiContainer.appendChild(this.subtitleEl);
 
+        this.fadeEl = document.createElement('div');
+        this.fadeEl.className = 'cinematic-fade hidden';
+        this.uiContainer.appendChild(this.fadeEl);
+
+        this.flashEl = document.createElement('div');
+        this.flashEl.className = 'cinematic-flash';
+        this.uiContainer.appendChild(this.flashEl);
+
         this.isPlaying = false;
         this.sequence = [];
         // Audio Context for SFX & HTML5 Audio for Voices
@@ -34,6 +42,11 @@ export class CinematicManager {
         const policeCar = new Car(this.scene, null, null, 'omni_police', true);
         this.actors['omni_police'] = policeCar.chassisMesh;
         this.actors['omni_police'].visible = false;
+        
+        // Setup Alpha-Omega Dummy
+        const bossCar = new Car(this.scene, null, null, 'alpha_omega', true);
+        this.actors['alpha_omega'] = bossCar.chassisMesh;
+        this.actors['alpha_omega'].visible = false;
         
         this.onCompleteCallback = null;
     }
@@ -60,7 +73,23 @@ export class CinematicManager {
         this.letterboxTop.classList.add('active');
         this.letterboxBottom.classList.add('active');
         this.subtitleEl.classList.add('active');
-        this.actors['omni_police'].visible = true;
+        
+        // Check which actors are in the sequence and show them
+        if(this.sequence[0] && this.sequence[0].actors) {
+             const actorIds = this.sequence[0].actors.map(a => a.id);
+             if(actorIds.includes('omni_police')) this.actors['omni_police'].visible = true;
+             if(actorIds.includes('alpha_omega')) this.actors['alpha_omega'].visible = true;
+        }
+
+        if (this.sequence[0] && this.sequence[0].fadeFromBlack) {
+            this.fadeEl.classList.remove('hidden'); // Start black
+            // Wait a frame then fade to clear
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    this.fadeEl.classList.add('hidden');
+                });
+            });
+        }
 
         this.applyClip(this.sequence[this.currentClipIndex]);
     }
@@ -87,6 +116,22 @@ export class CinematicManager {
 
         if (clip.sfx) {
             this.playSfx(clip.sfx);
+        }
+
+        if (clip.flash) {
+            this.flashEl.classList.add('active'); // Instant white
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    this.flashEl.classList.remove('active'); // Fade out
+                });
+            });
+        }
+
+        if (clip.glitch && this.glitchPass) {
+            this.glitchPass.enabled = true;
+            setTimeout(() => { 
+                if (this.glitchPass) this.glitchPass.enabled = false; 
+            }, clip.glitchDuration || 300);
         }
     }
 
@@ -172,6 +217,15 @@ export class CinematicManager {
 
         this.camera.position.lerpVectors(startPos, endPos, progress);
         
+        // Add Screen Shake
+        if (clip.shake) {
+            const intensity = typeof clip.shake === 'number' ? clip.shake : 0.5;
+            const noiseX = (Math.random() - 0.5) * intensity;
+            const noiseY = (Math.random() - 0.5) * intensity;
+            const noiseZ = (Math.random() - 0.5) * intensity;
+            this.camera.position.add(new THREE.Vector3(noiseX, noiseY, noiseZ));
+        }
+
         const currentLookAt = new THREE.Vector3().lerpVectors(startLook, endLook, progress);
         this.camera.lookAt(currentLookAt);
 
@@ -252,6 +306,7 @@ export class CinematicManager {
         this.playerCar.chassisBody.velocity.set(0, 0, 10);
         
         this.actors['omni_police'].visible = false;
+        this.actors['alpha_omega'].visible = false;
 
         if (this.onCompleteCallback) {
             this.onCompleteCallback();

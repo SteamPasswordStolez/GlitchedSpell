@@ -12,9 +12,17 @@ export class Car {
         // Vehicle Config
         this.chassisMass = 1500;
         this.chassisSize = new CANNON.Vec3(2, 1, 4);
+
+        if (this.carType === 'alpha_omega') {
+            this.chassisMass = 8000;
+            this.chassisSize = new CANNON.Vec3(4, 3, 9);
+        }
         
         // HP System
-        this.maxHp = this.carType === 'omni_police' ? 50 : 100;
+        this.maxHp = 100;
+        if (this.carType === 'omni_police') this.maxHp = 50;
+        if (this.carType === 'alpha_omega') this.maxHp = 400;
+        
         this.hp = this.maxHp;
         this.isDestroyed = false;
         this.currentSteering = 0;
@@ -60,7 +68,7 @@ export class Car {
         };
 
         const axleW = this.chassisSize.x * 0.5 + 0.3; // Track width
-        const axleL = this.chassisSize.z * 0.5 - 0.5; // Wheelbase
+        const axleL = this.chassisSize.z * 0.5 - (this.carType === 'alpha_omega' ? 1.5 : 0.5); // Wheelbase
 
         // Front Left (0)
         wheelOptions.chassisConnectionPointLocal.set(axleW, 0, axleL);
@@ -273,19 +281,44 @@ export class Car {
             lightbarMesh.add(blueMesh);
 
             this.chassisMesh.add(lightbarMesh);
+        } else if (this.carType === 'alpha_omega') {
+            // ALPHA-OMEGA: Giant, Monolithic, Glowing Red Truck
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.1, metalness: 0.9 }); 
+            const baseMesh = new THREE.Mesh(baseGeo, bodyMat);
+            baseMesh.castShadow = true;
+            this.chassisMesh.add(baseMesh);
+
+            // Glowing Red Vents
+            const ventGeo = new THREE.BoxGeometry(this.chassisSize.x + 0.2, 0.5, 1);
+            const ventMat = new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0xff0000, emissiveIntensity: 5 });
+            
+            for(let i=0; i<3; i++) {
+                const vent = new THREE.Mesh(ventGeo, ventMat);
+                vent.position.set(0, 0, -2 + i*2);
+                this.chassisMesh.add(vent);
+            }
+
+            // Massive Front Grill/Ram
+            const ramGeo = new THREE.CylinderGeometry(0.5, 0.5, this.chassisSize.x + 1, 8);
+            ramGeo.rotateZ(Math.PI / 2);
+            const ramMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 1 });
+            const ramMesh = new THREE.Mesh(ramGeo, ramMat);
+            ramMesh.position.set(0, -this.chassisSize.y/2 + 0.5, this.chassisSize.z/2 + 0.5);
+            this.chassisMesh.add(ramMesh);
         }
 
         // Wheels (Shared)
         this.wheelMeshes = [];
-        const wGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.4, 32);
+        const wheelRadius = this.carType === 'alpha_omega' ? 0.8 : 0.4;
+        const wGeo = new THREE.CylinderGeometry(wheelRadius, wheelRadius, wheelRadius, 32);
         wGeo.rotateZ(Math.PI / 2); // Align correctly
         const wMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.2, roughness: 0.9});
         
         // Hubcaps
-        const hubGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.42, 16);
+        const hubGeo = new THREE.CylinderGeometry(wheelRadius/2, wheelRadius/2, wheelRadius + 0.02, 16);
         hubGeo.rotateZ(Math.PI / 2);
         const hubMat = new THREE.MeshStandardMaterial({ 
-            color: this.carType === 'omni_police' ? 0xaaaaaa : 0xaa5533, 
+            color: this.carType === 'omni_police' ? 0xaaaaaa : (this.carType === 'alpha_omega' ? 0xff0000 : 0xaa5533), 
             metalness: 0.8, 
             roughness: 0.2 
         });
