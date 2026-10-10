@@ -38,11 +38,11 @@ test('all Strikegy calls to action use the requested external destination safely
 
 test('internal navigation targets and SVG URLs resolve from the Pages publishing root', () => {
   for (const match of html.matchAll(/href="#([^"]+)"/g)) assert.ok(html.includes(`id="${match[1]}"`), match[1]);
-  const svgUrls = [...html.matchAll(/(?:src|href)="([^"]+\.svg)"/g)].map(match => match[1]);
+  const svgUrls = [...html.matchAll(/(?:src|href)="([^"]+\.svg(?:\?[^\"]*)?)"/g)].map(match => match[1]);
   assert.equal(svgUrls.length, 3);
   for (const path of svgUrls) {
     assert.ok(path.startsWith('./'), `SVG URL must work below a project path: ${path}`);
-    assert.ok(readFileSync(new URL(`../${path}`, import.meta.url)).length > 0, path);
+    assert.ok(readFileSync(new URL(`../${path.split('?')[0]}`, import.meta.url)).length > 0, path);
   }
   assert.match(html, /name="viewport"/);
 });
