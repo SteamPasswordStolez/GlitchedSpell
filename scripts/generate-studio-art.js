@@ -1,7 +1,7 @@
 // Original, reproducible vector concept art; this is not a gameplay screenshot.
 import { mkdirSync, writeFileSync } from 'node:fs';
 
-const output = new URL('../public/assets/strikegy-arena.svg', import.meta.url);
+const output = new URL('../assets/strikegy-arena.svg', import.meta.url);
 const project = (x, z, height = 0) => [800 + (x - z) * 1.8, 280 + (x + z) * .56 - height];
 const points = coordinates => coordinates.map(point => project(...point).map(n => n.toFixed(1)).join(',')).join(' ');
 const polygon = (coordinates, fill, stroke = '#738659', opacity = 1) => `<polygon points="${points(coordinates)}" fill="${fill}" stroke="${stroke}" stroke-width=".8" opacity="${opacity}"/>`;
@@ -65,6 +65,6 @@ for(const [x,z,label,active] of [[-245,63,'A',false],[87,63,'B',true],[87,325,'C
 art += `<rect width="1600" height="700" fill="url(#haze)"/><rect width="1600" height="700" fill="url(#scan)"/>
 <g stroke="#c1f363" opacity=".55" fill="none"><path d="M25 70V25h45M1530 25h45v45M25 630v45h45M1530 675h45v-45"/><path d="M785 350h30M800 335v30"/></g>
 <g fill="#c0d5a1" font-family="monospace" font-size="10" opacity=".65"><text x="30" y="100">SECTOR / 03</text><text x="1460" y="620">A — B — C</text></g></svg>`;
-mkdirSync(new URL('../public/assets/', import.meta.url), { recursive:true });
+mkdirSync(new URL('../assets/', import.meta.url), { recursive:true });
 writeFileSync(output, art);
 console.log('Generated original Strikegy arena concept illustration.');
