@@ -1,12 +1,14 @@
 {
-  "name": "giltched-spell",
+  "name": "glitchedspell",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test scripts/studio.test.js",
+    "art": "node scripts/generate-studio-art.js"
   },
   "devDependencies": {
     "vite": "^7.3.1"

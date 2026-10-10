@@ -320,7 +320,7 @@ function animate() {
                     bossUiContainer.style.display = 'none';
                     
                     setTimeout(() => {
-                        window.location.href = 'index.html?mode=campaign&tutorial=true';
+                        window.location.href = 'lobby.html?mode=campaign&tutorial=true';
                     }, 5000);
                 }
             } else if (currentCheckpointIndex < environment.checkpoints.length) {
@@ -362,7 +362,7 @@ function animate() {
                             if (nextStage) {
                                 window.location.href = `game.html?stage=${nextStage}`;
                             } else {
-                                window.location.href = 'index.html'; // Fallback
+                                window.location.href = 'lobby.html'; // Fallback
                             }
                         };
 
