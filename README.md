@@ -1,6 +1,6 @@
 # GlitchedSpell
 
-GlitchedSpell의 공식 소개 사이트입니다. 웹 AAA 게임을 만드는 FPS 게임 스타트업과 대표작 [Strikegy](https://strikegy.xyz)를 소개합니다.
+GlitchedSpell의 소개 사이트입니다. 2026년 10월 시작한 독립 FPS 게임 개발 프로젝트로, 웹 AAA 게임을 목표로 개발하며 대표작 [Strikegy](https://strikegy.xyz)를 소개합니다. 사이트의 시작 시점 표기는 개발 프로젝트의 시작을 의미합니다.
 
 ## 실행
 

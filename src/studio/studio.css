@@ -73,6 +73,11 @@ h2 { font-size:clamp(30px,3.2vw,52px); letter-spacing:-.05em; font-weight:800; l
 .studio-copy { max-width:470px; }
 .studio-copy p { color:var(--muted); font-size:14px; line-height:1.95; margin-bottom:18px; }
 .studio-copy .lead { font-size:20px; color:var(--ink); font-weight:600; margin-bottom:15px; }
+.studio-facts { margin:25px 0 0; border-top:1px solid var(--line); }
+.studio-facts>div { display:grid; grid-template-columns:minmax(90px,1fr) 2fr; gap:16px; padding:13px 0; border-bottom:1px solid var(--line); align-items:baseline; }
+.studio-facts dt { font-size:11px; color:var(--muted); }
+.studio-facts dd { margin:0; font-size:13px; font-weight:600; overflow-wrap:anywhere; }
+.studio-facts time { color:var(--lime); }
 .studio-signature { margin-top:26px; display:flex; align-items:center; gap:17px; font-size:11px; color:#b3bca7; }
 .signature-symbol { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:26px; color:var(--lime); }
 .focus-row { display:grid; grid-template-columns:repeat(3,1fr); margin-top:50px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
